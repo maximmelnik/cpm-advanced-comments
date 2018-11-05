@@ -1,0 +1,283 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<title>sap.m.FeedListItem Test</title>
+	<script src="shared-config.js"></script>
+	<script id='sap-ui-bootstrap'
+			src='resources/sap-ui-core.js'
+			data-sap-ui-libs='sap.m'>
+	</script>
+	<script>
+	    var currentYear = new Date();
+		var oList2 = new sap.m.List({
+			inset: true
+		});
+		var data = {
+			navigation: [{
+				title: "Travel Expend",
+				description: "Access the travel expend workflow",
+				icon: "images/travel_expend.png",
+				iconInset: false,
+				type: "Active",
+				press: 'detailPage'
+			}, {
+				title: "Travel and expense report",
+				description: "Access travel and expense reports",
+				icon: "images/travel_expense_report.png",
+				iconInset: false,
+				type: "Detail",
+				press: 'detailPage'
+			}, {
+				title: "Travel Request",
+				description: "Access the travel request workflow",
+				icon: "images/travel_request.png",
+				iconInset: false,
+				type: "DetailAndActive",
+				press: 'detailPage'
+			}, {
+				title: "Work Accidents",
+				description: "Report your work accidents",
+				icon: "images/wounds_doc.png",
+				iconInset: false,
+				type: "Inactive",
+				press: 'detailPage'
+			}, {
+				title: "Travel Settings",
+				description: "Change your travel worflow settings",
+				icon: "images/settings.png",
+				iconInset: false,
+				type: "Navigation",
+				press: 'detailPage'
+			}]
+		};
+		var oItemTemplate1 = new sap.m.StandardListItem({
+			title: "{title}",
+			description: "{description}",
+			icon: "{icon}",
+			iconInset: "{iconInset}",
+			type: "{type}"
+		});
+		var oActionTemplate = new sap.m.FeedListItemAction({
+			icon: "{icon}",
+			text: "{text}"
+		});
+		
+		function bindListData(data, itemTemplate, list) {
+			var oModel = new sap.ui.model.json.JSONModel();
+			// set the data for the model
+			oModel.setData(data);
+			// set the model to the list
+			list.setModel(oModel);
+			// bind Aggregation
+			list.bindAggregation("items", "/navigation", itemTemplate);
+		}
+		
+		bindListData(data, oItemTemplate1, oList2);
+		
+		var oLeftButton = new sap.m.Button({
+			text: "Modal",
+			type: sap.m.ButtonType.Reject,
+			press: function() {
+				oPopover.setModal(!oPopover.getModal());
+			}
+		});
+		
+		var oRightButton = new sap.m.Button({
+			text: "Close",
+			type: sap.m.ButtonType.Accept,
+			press: function() {
+				oPopover.close();
+			}
+		});
+		
+		var footer = new sap.m.Bar({
+			contentLeft: [],
+			contentMiddle: [new sap.m.Button({icon: "images/favorite@2x.png"}),
+				new sap.m.Button({icon: "images/feed@2x.png"}),
+				new sap.m.Button({icon: "images/flag@2x.png"})],
+			contentRight: []
+		});
+		
+		var oPopover = new sap.m.Popover({
+			placement: sap.m.PlacementType.Auto,
+			title: "Popover",
+			showHeader: true,
+			leftButton: oLeftButton,
+			rightButton: oRightButton,
+			beforeOpen: function(oEvent) {
+				jQuery.sap.log.info("before popover opens!!!");
+			},
+			afterOpen: function(oEvent) {
+				jQuery.sap.log.info("popover is opened finally!!!");
+			},
+			beforeClose: function(oEvent) {
+				jQuery.sap.log.info("before popover closes!!!");
+			},
+			afterClose: function(oEvent) {
+				jQuery.sap.log.info("popover is closed properly!!!");
+			},
+			footer: footer,
+			content: [
+				oList2
+			]
+		});
+		var oFeedList = new sap.m.List("oFeedItemList", {
+			mode: "SingleSelectMaster"
+			//showSeparators: "None",
+		});
+		var fnOpenPopup = function(oControlEvent) {
+			oPopover.openBy(oControlEvent.getParameter("getDomRef")());
+		};
+		var oFeedListItemTemplate = new sap.m.FeedListItem({
+			type: "{type}",
+			icon: "{icon}",
+			activeIcon: "{activeIcon}",
+			text: "{text}",
+			sender: "{sender}",
+			showIcon: "{showIcon}",
+			senderActive: "{senderActive}",
+			iconActive: "{iconActive}",
+			info: "{info}",
+			timestamp: "{timestamp}",
+			type: "{type}",
+			maxCharacters: 100,
+			senderPress: fnOpenPopup,
+			iconPress: fnOpenPopup,
+			convertLinksToAnchorTags: sap.m.LinkConversion.All,
+			actions: {
+				path: "/actions",
+				template: oActionTemplate,
+				templateShareable : false
+			}
+		});
+		function bindFeedListData(data, itemTemplate, list) {
+			var oModel = new sap.ui.model.json.JSONModel();
+			// set the data for the model
+			oModel.setData(data);
+			// set the model to the list
+			list.setModel(oModel);
+			// bind Aggregation
+			list.bindAggregation("items", "/chunks", itemTemplate);
+		}
+		jQuery.sap.require("sap.ui.core.IconPool");
+		
+		var sURI = sap.ui.core.IconPool.getIconURI("personnel-view");
+		
+		var feedData = {
+				chunks: [{
+					text: "Speedily say has suitable disposal add boy. On forth doubt miles of child. Exercise joy man children rejoiced. Yet uncommonly his ten who diminution astonished. Demesne new manners savings staying had. Under folly balls death own point now men. Match way these she avoid see death. She whose drift their fat off. ",
+					sender: "Kurt Nistroy",
+					senderActive: false,
+					iconActive: false,
+					timestamp: "14 November | 2017"
+				}, {
+					text: "Folly was these three and songs arose whose. Of in vicinity contempt together in possible branched. Assured company hastily looking garrets in oh. Most have love my gone to this so. Discovered interested prosperous the our affronting insipidity day. Missed lovers way one vanity wishes nay but. Use shy seemed within twenty wished old few regret passed. Absolute one hastened mrs any sensible.",
+					sender: "Ada Copengagen",
+					senderActive: false,
+					iconActive: false,
+					timestamp: "10 November | 2017"
+				}, {
+					text: "Cottage out enabled was entered greatly prevent message. No procured unlocked an likewise. Dear but what she been over gay felt body. Six principles advantages and use entreaties decisively. Eat met has dwelling unpacked see whatever followed. Court in of leave again as am. Greater sixteen to forming colonel no on be. So an advice hardly barton. He be turned sudden engage manner spirit. ",
+					sender: "Eldar Campaz",
+					senderActive: false,
+					iconActive: false,
+					timestamp: "08 November | 2017"
+				}, {
+					text: "Whole every miles as tiled at seven or. Wished he entire esteem mr oh by. Possible bed you pleasure civility boy elegance ham. He prevent request by if in pleased. Picture too and concern has was comfort. Ten difficult resembled eagerness nor. Same park bore on be. Warmth his law design say are person. Pronounce suspected in belonging conveying ye repulsive. ",
+					sender: "Serge Leoni",
+					senderActive: false,
+					iconActive: false,
+					timestamp: "06 November | 2017"
+				}, {
+					text: "Carried nothing on am warrant towards. Polite in of in oh needed itself silent course. Assistance travelling so especially do prosperous appearance mr no celebrated. Wanted easily in my called formed suffer. Songs hoped sense as taken ye mirth at. Believe fat how six drawing pursuit minutes far. Same do seen head am part it dear open to. Whatever may scarcely judgment had. ",
+					sender: "Kurt Nistroy",
+					senderActive: false,
+					iconActive: false,
+					timestamp: "05 November | 2017"
+				}, {
+					text: "Unpleasant nor diminution excellence apartments imprudence the met new. Draw part them he an to he roof only. Music leave say doors him. Tore bred form if sigh case as do. Staying he no looking if do opinion. Sentiments way understood end partiality and his. ",
+					sender: "Ada Copengagen",
+					senderActive: false,
+					iconActive: false,
+					timestamp: "03 November | 2017"
+				}],
+
+				actions: [
+					{
+						icon: "sap-icon://accept",
+						text: "Accept"
+					},
+					{
+						icon: "sap-icon://decline",
+						text: "Reject"
+					}
+				]
+			};		
+		
+		bindFeedListData(feedData, oFeedListItemTemplate, oFeedList);
+		
+		var oButton1 = new sap.m.Button({
+			text: "FA",
+			press: function(oEvent) {
+				
+				sap.m.MessageToast.show("Rerender triggered.");
+				//sap.ui.getCore().byId("feedListPage").invalidate();
+			}
+		});
+		
+		var oButton2 = new sap.m.Button({
+			text: "PMS",
+			press: function(oEvent) {
+				var year = new Date();
+				sap.m.MessageToast.show(year.getFullYear());
+				//sap.ui.getCore().byId("feedListPage").invalidate();
+			}
+		});
+		
+		var oYear = new sap.m.SegmentedButton({
+			selectedKey:"one",
+			items: [new sap.m.SegmentedButtonItem({
+						text: currentYear.getFullYear()-3
+					}), 
+					new sap.m.SegmentedButtonItem({
+						text: currentYear.getFullYear()-2
+					}),
+					new sap.m.SegmentedButtonItem({
+						text: currentYear.getFullYear()-1
+					}),
+					new sap.m.SegmentedButtonItem({
+						text: currentYear.getFullYear()
+					})
+			]
+		});
+		
+		var oApp = new sap.m.SegmentedButton({
+			selectedKey:"one",
+			items: [new sap.m.SegmentedButtonItem({
+						text: "FA"
+					}), 
+					new sap.m.SegmentedButtonItem({
+						text: "PMS"
+					})
+			],
+		});
+		
+		var appFeedList = new sap.m.App("myApp", {
+			initialPage: "feedListPage"
+		});
+		
+		var feedListPage = new sap.m.Page("feedListPage", {
+			title: "Comment",
+			content: [oYear, oApp, oButton2, oFeedList]
+		});
+		
+		appFeedList.addPage(feedListPage);
+		appFeedList.placeAt("content");
+	</script>
+</head>
+<body id="body" class="sapUiBody">
+<div id="content"></div>
+</body>
+</html>
